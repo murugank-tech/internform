@@ -1,9 +1,13 @@
-
+import "./App.css";
 import Register from "./Register";
 
 function App() {
   return (
-    <Register />
+    <div className="app-shell">
+      <div className="app-container">
+        <Register />
+      </div>
+    </div>
   );
 }
 
