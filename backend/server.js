@@ -15,7 +15,7 @@ app.use("/api/users", require("./routes/Userroutes"));
 const frontendDist = path.join(__dirname, "../frontend/dist");
 app.use(express.static(frontendDist));
 
-app.get("*", (req, res) => {
+app.use((req, res) => {
   if (req.path.startsWith("/api/")) {
     return res.status(404).json({ message: "API route not found" });
   }
