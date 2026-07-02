@@ -1,5 +1,6 @@
 require("dotenv").config();
 
+const path = require("path");
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -11,6 +12,16 @@ app.use(express.json());
 
 app.use("/api/users", require("./routes/Userroutes"));
 
+const frontendDist = path.join(__dirname, "../frontend/dist");
+app.use(express.static(frontendDist));
+
+app.get("*", (req, res) => {
+  if (req.path.startsWith("/api/")) {
+    return res.status(404).json({ message: "API route not found" });
+  }
+  res.sendFile(path.join(frontendDist, "index.html"));
+});
+
 mongoose.connect(process.env.MONGO_URI)
 .then(() => {
     console.log("MongoDB Connected");
@@ -19,6 +30,7 @@ mongoose.connect(process.env.MONGO_URI)
     console.log(err);
 });
 
-app.listen(process.env.PORT, () => {
-    console.log(`Server running on ${process.env.PORT}`);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server running on ${PORT}`);
 });
